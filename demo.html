@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>cubemap video playback</title>
+
+        <link rel="stylesheet" href="demo.css"/>
+
+        <script src="http://threejs.org/build/three.min.js"></script>
+        <script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
+        <script src="cubemap-video.js"></script>
+    </head>
+
+    <body>
+        <div class="screen waiting"></div>
+
+        <script>
+            var cv;
+            var screen = document.querySelector('.screen');
+
+            var playing = false;
+            var onReadyCalled = false;
+            var onReady = function onReady() {
+                screen.removeEventListener('click', onReady);
+                if (onReadyCalled) { return; }
+                onReadyCalled = true;
+
+                setTimeout(function() {
+                    if (!playing) {
+                        cv.play();
+                    }
+                }, 1000);
+            };
+
+            cv = cubemapVideo({
+                //url       : 'http://rd3.videos.sapo.pt/VM8WZDw2zB1heeBkK0I7/mov/1',
+                url       : 'http://127.0.0.1:3000/stream/7ma03n',
+                container : screen,
+                options   : {
+                    //autoplay : false,
+                    //loop     : false
+                }
+            });
+
+            cv.on('loadedmetadata', function() {
+                onReady();
+                console.log('duration:', this.getDuration());
+            });
+
+            cv.on('timeupdate', function() {
+                playing = true;
+                console.log('t:', this.getCurrentTime());
+            });
+
+            screen.addEventListener('click', onReady);
+        </script>
+    </body>
+</html>
