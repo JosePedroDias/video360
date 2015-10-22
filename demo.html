@@ -23,20 +23,15 @@
             var playing = false;
             var onReadyCalled = false;
             var onReady = function onReady() {
+                screen.classList.remove('waiting');
                 screen.removeEventListener('click', onReady);
+                cv.play();
                 if (onReadyCalled) { return; }
                 onReadyCalled = true;
-
-                setTimeout(function() {
-                    if (!playing) {
-                        cv.play();
-                    }
-                }, 1000);
             };
 
             cv = cubemapVideo({
-                //url       : 'http://rd3.videos.sapo.pt/VM8WZDw2zB1heeBkK0I7/mov/1',
-                url       : 'http://127.0.0.1:3000/stream/7ma03n',
+                url       : 'http://stage.sl.pt:3001/stream/7ma03n',
                 container : screen,
                 options   : {
                     //autoplay : false,
