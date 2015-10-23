@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
+<head>
+    <meta charset="utf-8">
 
-        <title>video 360 playback</title>
+    <title>video 360 playback</title>
 
-        <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
 
-        <link rel="stylesheet" href="demo.css"/>
+    <link rel="stylesheet" href="demo.css"/>
 
-        <script src="http://threejs.org/build/three.min.js"></script>
-        <script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="http://threejs.org/build/three.min.js"></script>
+    <script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
 
-        <script src="can-autoplay.js"></script>
-        <script src="video360.js"></script>
-        <script src="player-ui.js"></script>
-    </head>
+    <script src="can-autoplay.js"></script>
+    <script src="video360.js"></script>
+    <script src="player-ui.js"></script>
+</head>
 
-    <body>
-        <div class="screen"></div>
-        <div class="player-ui"></div>
+<body>
+<div class="screen"></div>
+<div class="player-ui"></div>
 
-        <div class="samples">
-            <button onclick="location.hash='cube http://acor.sl.pt:3000/stream/k0rvmq'; location.reload()">star wars</button>
-            <button onclick="location.hash='cube http://acor.sl.pt:3000/stream/um9qic'; location.reload()">middle east</button>
-            <button onclick="location.hash='equi http://acor.sl.pt:3000/stream/gl91b1'; location.reload()">family</button>
-            <button onclick="location.hash='equi http://acor.sl.pt:3000/stream/3msu20'; location.reload()">baloon</button>
-        </div>
+<div class="samples">
+    <button onclick="location.hash='cube http://acor.sl.pt:3000/stream/k0rvmq'; location.reload()">star wars</button>
+    <button onclick="location.hash='cube http://acor.sl.pt:3000/stream/um9qic'; location.reload()">middle east</button>
+    <button onclick="location.hash='equi http://acor.sl.pt:3000/stream/gl91b1'; location.reload()">family</button>
+    <button onclick="location.hash='equi http://acor.sl.pt:3000/stream/3msu20'; location.reload()">baloon</button>
+</div>
 
-        <script>
-            var format = 'cube';
-            var url = 'http://acor.sl.pt:3000/stream/um9qic';
+<script>
+    var format = 'cube';
+    var url = 'http://acor.sl.pt:3000/stream/um9qic';
 
-            var hash = location.hash;
-            if (hash) {
-                hash = hash.substring(1).split(' ');
-                format = hash[0];
-                url    = hash[1];
+    var hash = location.hash;
+    if (hash) {
+        hash = hash.substring(1).split(' ');
+        format = hash[0];
+        url    = hash[1];
+    }
+
+
+    var screenEl = document.querySelector('.screen');
+    var uiEl = document.querySelector('.player-ui');
+
+    var pl = playerUI(uiEl);
+
+
+
+    canAutoplay(function(autoplaySupported) {
+        var cv = video360({
+            format    : format,
+            url       : url,
+            container : screenEl,
+            options   : {
+                autoplay : autoplaySupported,
+                loop     : true
+            }
+        });
+
+        cv.on('loadedmetadata', function() {
+            pl.setDuration(this.getDuration());
+        });
+
+        cv.on('timeupdate', function() {
+            pl.setCurrentTime(this.getCurrentTime());
+        });
+
+        cv.on('play', function() {
+            pl.play();
+        });
+
+        cv.on('pause', function() {
+            pl.pause();
+        });
+
+
+
+        pl.on('play', function() {
+            cv.play();
+        });
+
+        pl.on('pause', function() {
+            cv.pause();
+        });
+
+
+
+        if (!canAutoplay) {
+            screenEl.classList.remove('waiting');
+
+            var onFirstClick = function onFirstClick() {
+                screenEl.removeEventListener('click', onFirstClick);
+                screenEl.classList.remove('waiting');
+                cv.play();
             }
 
-
-            var screenEl = document.querySelector('.screen');
-            var uiEl = document.querySelector('.player-ui');
-
-            var pl = playerUI(uiEl);
-
-
-
-            canAutoplay(function(autoplaySupported) {
-                var cv = video360({
-                    format    : format,
-                    url       : url,
-                    container : screenEl,
-                    options   : {
-                        autoplay : autoplaySupported,
-                        loop     : true
-                    }
-                });
-
-                cv.on('loadedmetadata', function() {
-                    pl.setDuration(this.getDuration());
-                });
-
-                cv.on('timeupdate', function() {
-                    pl.setCurrentTime(this.getCurrentTime());
-                });
-
-                cv.on('play', function() {
-                    pl.play();
-                });
-
-                cv.on('pause', function() {
-                    pl.pause();
-                });
-
-
-
-                pl.on('play', function() {
-                    cv.play();
-                });
-
-                pl.on('pause', function() {
-                    cv.pause();
-                });
-
-
-
-                if (!canAutoplay) {
-                    screenEl.classList.remove('waiting');
-
-                    var onFirstClick = function onFirstClick() {
-                        screenEl.removeEventListener('click', onFirstClick);
-                        screenEl.classList.remove('waiting');
-                        cv.play();
-                    }
-
-                }
-                screenEl.addEventListener('click', onFirstClick);
-            });
-        </script>
-    </body>
+        }
+        screenEl.addEventListener('click', onFirstClick);
+    });
+</script>
+</body>
 </html>
