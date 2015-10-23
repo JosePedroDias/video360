@@ -8,16 +8,20 @@ body {
 }
 
 
+.samples {
+    position: absolute;
+}
+
 
 .screen {
     position: absolute;
     left:   0;
     top:    0;
     width:  100%;
-    height: 100%;
+    height: calc(100% - 2em);
 }
 
-.waiting {
+/*waiting {
     background-color: black;
 }
 
@@ -36,7 +40,97 @@ body {
     font-weight: bold;
     color: #FFF;
     content: 'click to start playing';
-    /*background-color: rgba(0, 0, 0, 0.5);*/
     text-shadow: 0 0 8px #000, 0 0 4px #000;
+}*/
 
+
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+
+.player-ui {
+    position: absolute;
+    left:   0;
+    bottom: 0;
+    width:  100%;
+    height: 2em;
+    background-color: #333;
+    color:            #FFF;
+}
+
+.player-ui .left-ctn {
+    position: absolute;
+    width: 200px;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.player-ui .right-ctn {
+    position: absolute;
+    width: calc(100% - 200px);
+    height: 100%;
+    right: 0;
+    top: 0;
+}
+
+.player-ui .play-pause,
+.player-ui .current-time,
+.player-ui .duration {
+    display: inline-block;
+    height: 100%;
+    line-height: 2em;
+    vertical-align: middle;
+    font-size: 1.2em;
+    padding: 0 0.5em;
+    cursor: default;
+}
+
+.player-ui .play-pause {
+    cursor: pointer;
+}
+
+.player-ui .time-bar,
+.player-ui .volume-bar {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    box-shadow: inset 0 0 6px 2px #000;
+    cursor: pointer;
+}
+
+.player-ui .time-bar {
+    width: 80%;
+    left: 0;
+}
+
+.player-ui .volume-bar {
+    width: 20%;
+    right: 0;
+}
+
+.player-ui .time-percent,
+.player-ui .volume-percent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+}
+
+.player-ui .time-percent {
+    background-color: darkolivegreen;
+    width: 0%;
+}
+
+.player-ui .volume-percent {
+    background-color: darkslateblue;
+    width: 100%;
 }
